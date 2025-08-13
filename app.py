@@ -1,120 +1,33 @@
-import streamlit as st
-st.image("intellipaat.jpeg")
-import time as t
+import os, requests, streamlit as st
+st.image("github img.png")
 
-st.set_page_config(page_title = "Intellipaat Lookup")
+# page_title = sets the browser tab title
+st.set_page_config(page_title="GitHub Lookup")
+st.title("🐙 GitHub User Lookup")
 
- 
-# title = It is used to add the titile for the web app
-st.title("Welcome to Intellipaat")
+token = os.getenv("GITHUB_TOKEN")
+headers = {"Accept": "application/vnd.github.v3+json"}
+if token: headers["Authorization"] = f"token {token}"
 
-# header
-st.header("Machine Learning")
+user = st.text_input("GitHub username", "Aayushi-DataEn")
 
-# sub header
-st.subheader ("Linear Regression")
-
-# To give information
-st.info("Information details of a user")
-
-# warning message
-st.warning("Come on time or else you will be marked absent")
-
-# Error message
-st.error("Wrong Password")
-
-# success message
-st.success("Congrats! You have got A-grade")
-
-# Write function (to write text along with any code)
-st.write("Employee name")
-st.write(range(50))
-
-# Markdown
-st.markdown("# Intellipaat")
-st.markdown("## Intellipaat")
-st.markdown("### Intellipaat")
-st.markdown(":smiley:")
-
-st.text("Intelipaat learners")
-
-# Caption
-st.caption("Caption is here")
-
-# Latex func= to diplay mathemtical operations/equation
-st.latex(r''' a+b x^2+c''')
-
-# Widgets
-
-# checkbox
-st.checkbox("Login")
-
-# button
-st.button("click")
-
-# radio = display a radio button
-st.radio("Pick your gender", ["Male", "Female", "Other"])
-
-# select box (Only one)
-st.selectbox("Pick your course", ["ML","Cloud", "Cyber Security"])
-
-# multi select
-st.multiselect("Choose the Department", ["Content", "Sales", "Accounts", "Marketing"])
-
-# select sliders
-st.select_slider("Rating", ["Bad", "Average", "Good", "Excellent", "Outstanding"])
-
-# slider
-st.slider("Enter your number", 0,30)
-
-# number_input
-st.number_input("Pick a number", 0,100)
-
-# text_input
-st.text_input("Enter your email address")
-
-# date_input
-st.date_input("Date of Birth")
-
-st.time_input("Hey what's the timing")
-
-# text_area = to print a text in more than one line , Description
-st.text_area("Welcome to the Intellipaat Website. Hello Learners ")
-
-# file_uploader = to uplaod a file
-st.file_uploader("Upload your document")
-
-st.color_picker("Color")
-
-# progress
-st.progress(90)
-
-# spinner = display a temporary waiting message during execution
-with st.spinner("Just wait:"):
-    t.sleep(2)
-
-# balloon = to display balloons for celebration
-st.balloons()
-
-# sidebar = to pinned the element to the left side
-st.sidebar.title("Intellipaat")
-st.sidebar.text_input("Enter your Email")
-st.sidebar.text_input("Password")
-st.sidebar.button("Submit")
-st.sidebar.radio("Professional Expert",["Student", "Working"])
-
-# Data Visualisation
-import pandas as pd
-import numpy as np
-st.title("Bar Chart")
-data = pd.DataFrame(np.random.randn(50,2), columns=["x", "y"])
-st.bar_chart(data)
-
-st.title("Line Chart")
-st.line_chart(data)
-
-st.title("Area Chart")
-st.area_chart(data)
-
-
-
+if st.button("Search"):
+    try:
+        response = requests.get(f"https://api.github.com/users/{user}", headers=headers, timeout=10)
+        if response.status_code == 200:
+            d = response.json()
+            # the above line converts HTTP response into a Python dict
+            
+            if d.get("avatar_url"): st.image(d["avatar_url"], width=160)
+            st.write(f"*Name:* {d.get('name') or 'N/A'}")
+            st.write(f"*Location:* {d.get('location') or 'N/A'}")
+            st.write(f"*Company:* {d.get('company') or 'N/A'}")
+            st.write(f"*Repos:* {d.get('public_repos',0)} | *Followers:* {d.get('followers',0)} | *Following:* {d.get('following',0)}")
+            st.write(f"*Profile:* {d.get('html_url')}")
+        elif response.status_code == 404:
+            st.error(f"User '{user}' not found.")
+        else:
+            msg = (response.json().get("message") if response.headers.get("content-type","").startswith("application/json") else "Error")
+            st.error(f"HTTP {response.status_code}: {msg}")
+    except Exception as e:
+        st.error(f"Error: {e}")
