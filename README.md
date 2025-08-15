@@ -51,7 +51,7 @@ Local URL: [https://localhost:8501](https://localhost:8501)
 2. Click search.
 3. View the fetched profile information, avatar, and stats instantly.
 
-## ** Deployment**
+## **Deployment**
 You can deploy this app for free using **Streamlit Community Cloud:**
 1. Push your code to Github
 2. Go to [https://share.streamlit.io/](https://share.streamlit.io/)
