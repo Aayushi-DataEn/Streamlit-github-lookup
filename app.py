@@ -16,7 +16,7 @@ if st.button("Search"):
         response = requests.get(f"https://api.github.com/users/{user}", headers=headers, timeout=10)
         if response.status_code == 200:
             d = response.json()
-            # the above line converts HTTP response into a Python dict
+            
             
             if d.get("avatar_url"): st.image(d["avatar_url"], width=160)
             st.write(f"*Name:* {d.get('name') or 'N/A'}")
@@ -24,10 +24,13 @@ if st.button("Search"):
             st.write(f"*Company:* {d.get('company') or 'N/A'}")
             st.write(f"*Repos:* {d.get('public_repos',0)} | *Followers:* {d.get('followers',0)} | *Following:* {d.get('following',0)}")
             st.write(f"*Profile:* {d.get('html_url')}")
+            
         elif response.status_code == 404:
             st.error(f"User '{user}' not found.")
+            
         else:
             msg = (response.json().get("message") if response.headers.get("content-type","").startswith("application/json") else "Error")
             st.error(f"HTTP {response.status_code}: {msg}")
+            
     except Exception as e:
         st.error(f"Error: {e}")
