@@ -26,22 +26,22 @@ Example search for Aayushi-DataEn:
 ## **Installation & Setup**
 
 ### **1. Clone this repository**
-'''bash
-git clone https://github.com/Aayushi-DataEn/Streamlit-github-lookup
-cd Streamlit-github-lookup
+```bash
+   git clone https://github.com/Aayushi-DataEn/Streamlit-github-lookup
+   cd Streamlit-github-lookup
 
 ### **2. Create and activate a virtual environment (optional but recommended)
-'''bash
-python -m venv venv
-venv\SCripts\activate
+```bash
+    python -m venv venv
+    venv\Scripts\activate  
 
 ### **3. Install Dependencies**
-'''bash
-pip install -r requirements.txt
+```bash
+    pip install -r requirements.txt
 
 ### **4. Run the app**
-'''bash
-streamlit run app.py
+```bash
+    streamlit run app.py
 
 ### **5. Open in browser**
 Local URL: [https://localhost:8501](https://localhost:8501)
